@@ -15,9 +15,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include_directories(
 	src/
-#	../../include
-#	../../deps
-#	../../glfw/include
 )
 
 file(GLOB sources
@@ -26,7 +23,6 @@ file(GLOB sources
 	src/*.h
 	src/*.hpp
 	src/*.inc
-#	../../include/*.h
 )
 
 add_executable(${name} ${sources})
@@ -38,49 +34,8 @@ if (WIN32)
 	target_link_libraries(${name} winmm)
 endif()
 
-
-
-SET(BUILD_TESTING OFF CACHE BOOL "BUILD_TESTING" FORCE)
-SET(USE_MSVC_RUNTIME_LIBRARY_DLL OFF CACHE BOOL "USE_MSVC_RUNTIME_LIBRARY_DLL" FORCE)
-SET(ZSTD_BUILD_PROGRAMS OFF CACHE BOOL "ZSTD_BUILD_PROGRAMS" FORCE)
-SET(ZSTD_BUILD_SHARED OFF CACHE BOOL "ZSTD_BUILD_SHARED" FORCE)
-SET(ZSTD_BUILD_TESTS OFF CACHE BOOL "ZSTD_BUILD_SHARED" FORCE)
-SET(ZSTD_LEGACY_SUPPORT OFF CACHE BOOL "ZSTD_LEGACY_SUPPORT" FORCE)
-SET(ZSTD_MULTITHREAD_SUPPORT_DEFAULT OFF CACHE BOOL "ZSTD_MULTITHREAD_SUPPORT_DEFAULT" FORCE)
-SET(ZSTD_MULTITHREAD_SUPPORT OFF CACHE BOOL "ZSTD_MULTITHREAD_SUPPORT" FORCE)
-add_subdirectory(../../zstd/build/cmake zstd)
-
-
-file(GLOB xx_sources
-	${CMAKE_CURRENT_SOURCE_DIR}/../../include/*.h
-	${CMAKE_CURRENT_SOURCE_DIR}/../../include/*.natvis
-	${CMAKE_CURRENT_SOURCE_DIR}/../../src/*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/../../src/*.c
-	${CMAKE_CURRENT_SOURCE_DIR}/../../deps/*.h
-	${CMAKE_CURRENT_SOURCE_DIR}/../../deps/*.c
-	${CMAKE_CURRENT_SOURCE_DIR}/../../deps/*.cpp
-)
-add_library(xx
-    ${xx_sources}
-)
-target_include_directories(xx PUBLIC
-	${CMAKE_CURRENT_SOURCE_DIR}/../../glfw/include
-	${CMAKE_CURRENT_SOURCE_DIR}/../../include
-	${CMAKE_CURRENT_SOURCE_DIR}/../../deps
-)
-target_link_libraries(xx libzstd_static)
+add_subdirectory(../../ xx)
 target_link_libraries(${name} xx)
-
-
-
-SET(GLFW_BUILD_DOCS OFF CACHE BOOL "GLFW_BUILD_DOCS" FORCE)
-SET(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "GLFW_BUILD_EXAMPLES" FORCE)
-SET(GLFW_BUILD_TESTS OFF CACHE BOOL "GLFW_BUILD_TESTS" FORCE)
-SET(GLFW_INSTALL OFF CACHE BOOL "GLFW_INSTALL" FORCE)
-add_subdirectory(../../glfw glfw)
-target_link_libraries(${name} glfw)
-
-
 
 if(MSVC)
 
@@ -123,15 +78,6 @@ if(MSVC)
 		$<$<PLATFORM_ID:Windows>:/bigobj>
 		$<$<PLATFORM_ID:Windows>:/MP${Biogears_BUILD_PARALLEL_LEVEL}>
 	)
-	
-	
-	target_compile_options(xx PRIVATE
-		$<$<PLATFORM_ID:Windows>:/fp:fast>
-		$<$<PLATFORM_ID:Windows>:/std:c17>
-		$<$<PLATFORM_ID:Windows>:/bigobj>
-		$<$<PLATFORM_ID:Windows>:/MP${Biogears_BUILD_PARALLEL_LEVEL}>
-	)
-
 
 
 	set_target_properties(${name} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
