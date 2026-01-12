@@ -2,12 +2,7 @@
 #include "pch.h"
 using XY = xx::XY;
 
-struct Sprite {
-	xx::Frame frame;
-	XY pos{};
-};
-
-struct Monster;
+struct Snake;
 struct Game : xx::GameBase {
 	static constexpr float cFps{ 120 };
 	static constexpr float cDelta{ 1.f / cFps };
@@ -18,9 +13,9 @@ struct Game : xx::GameBase {
 
 	xx::Shared<xx::Node> ui;
 	xx::Camera cam;
-	xx::Shared<Monster> heart;
+	xx::Shared<Snake> snake;
 	xx::Rnd rnd;
-	xx::List<Sprite> sprites;
+	xx::Shared<xx::Label> deathLabel;  // 死亡提示标签
 
 	void Init() override;
 	void GLInit() override;

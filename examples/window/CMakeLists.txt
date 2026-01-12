@@ -126,6 +126,9 @@ if(MSVC)
 	
 	
 	target_compile_options(xx PRIVATE
+		$<$<PLATFORM_ID:Windows>:/fp:fast>
+		$<$<PLATFORM_ID:Windows>:/std:c17>
+		$<$<PLATFORM_ID:Windows>:/bigobj>
 		$<$<PLATFORM_ID:Windows>:/MP${Biogears_BUILD_PARALLEL_LEVEL}>
 	)
 
