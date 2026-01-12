@@ -9,9 +9,15 @@ namespace xx {
 
     int WriteAllBytes(std::filesystem::path const& path, char const* buf, size_t len);
 
-    void ZstdDecompress(std::string_view const& src, Data& dst);
+    bool IsAbsolutePathName(std::string_view s);
+
+    bool IsZstdCompressedData(void const* buf_, size_t len);
+
+    bool IsZstdCompressedData(Span d);
+
+    void ZstdDecompress(Span src, Data& dst);
 
     void TryZstdDecompress(Data& d);
 
-    void ZstdCompress(std::string_view const& src, Data& dst, int level = 3, bool doShrink = true);
+    void ZstdCompress(Span src, Data& dst, int level = 3, bool doShrink = true);
 }

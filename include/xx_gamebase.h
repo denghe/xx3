@@ -22,7 +22,7 @@ namespace xx {
         }
         virtual ~GameBase();
 
-        // need override
+        // user need override
         virtual void Init() {}
         virtual void GLInit() {}
         virtual void Update() {}
@@ -157,17 +157,13 @@ namespace xx {
         void DisableIME();  // call before Run if needed
 
 
-        static bool IsCompressedData(void const* buf_, size_t len);
-        static bool IsCompressedData(Span d);
-
-        static bool IsAbsolute(std::string_view path_);
-
         // convert dir to search path format
         static std::string ToSearchPath(std::string_view dir);
 
         // add relative base dir to searchPaths
         void SearchPathAdd(std::string_view dir, bool insertToFront = false);
 
+        // short file name to full path name( with search path )
         std::string GetFullPath(std::string_view fn, bool fnIsFileName = true);
 
         // read all data by full path
@@ -176,6 +172,7 @@ namespace xx {
         // read all data by short path. return data
         Data LoadFileData(std::string_view fn);
 
+        // auto decompress
         Data LoadDataFromData(uint8_t const* buf, size_t len);
         Data LoadDataFromData(Span d);
         template<size_t len>
@@ -183,6 +180,7 @@ namespace xx {
             return LoadDataFromData(buf, len);
         }
 
+        // auto decompress
         Shared<GLTexture> LoadTextureFromData(void* buf_, size_t len_);
         Shared<GLTexture> LoadTextureFromData(Span d);
         template<size_t len>

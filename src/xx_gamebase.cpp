@@ -104,11 +104,6 @@ namespace xx {
             shader = {};
         }
     }
-
-    bool GameBase::IsAbsolute(std::string_view s) {
-        return s[0] == '/' || (s.size() > 1 && s[1] == ':');
-    }
-
     
     std::string GameBase::ToSearchPath(std::string_view dir) {
         std::string s;
@@ -147,7 +142,7 @@ namespace xx {
 
     void GameBase::SearchPathAdd(std::string_view dir, bool insertToFront) {
         auto s = ToSearchPath(dir);
-        if (!IsAbsolute(s)) {
+        if (!IsAbsolutePathName(s)) {
             s.insert(0, rootPath);
         }
 
@@ -165,7 +160,7 @@ namespace xx {
         fn = Trim(fn);
 
         // is absolute path?
-        if (IsAbsolute(fn))
+        if (IsAbsolutePathName(fn))
             return std::string(fn);
 
         // foreach search path find
@@ -189,23 +184,10 @@ namespace xx {
     }
 
 
-	bool GameBase::IsCompressedData(void const* buf_, size_t len) {
-		auto buf = (uint8_t const*)buf_;
-		return len >= 4 && buf[0] == 0x28 && buf[1] == 0xB5 && buf[2] == 0x2F && buf[3] == 0xFD;
-	}
-
-	bool GameBase::IsCompressedData(Span d) {
-		return IsCompressedData(d.buf, d.len);
-	}
-
 	Data GameBase::LoadFileDataWithFullPath(std::string_view fp) {
 		auto d = ReadAllBytes_sv(fp);
 		if (!d) return d;
-		if (IsCompressedData(d)) {
-			Data d2;
-			ZstdDecompress(d, d2);
-			return d2;
-		}
+		TryZstdDecompress(d);
 		return d;
 	}
 
@@ -218,7 +200,7 @@ namespace xx {
 
 	// copy or decompress
 	Data GameBase::LoadDataFromData(uint8_t const* buf, size_t len) {
-		if (IsCompressedData(buf, len)) {
+		if (IsZstdCompressedData(buf, len)) {
 			Data d;
 			ZstdDecompress({ (char*)buf, len }, d);
 			return d;
@@ -231,7 +213,7 @@ namespace xx {
 	}
 
     Shared<GLTexture> GameBase::LoadTextureFromData(void* buf_, size_t len_) {
-		if (IsCompressedData(buf_, len_)) {	// zstd
+		if (IsZstdCompressedData(buf_, len_)) {	// zstd
 			Data d;
 			ZstdDecompress({ (char*)buf_, len_ }, d);
 			return MakeShared<GLTexture>(LoadGLTexture(d));
@@ -244,7 +226,8 @@ namespace xx {
 	}
 
     Shared<GLTexture> GameBase::LoadTexture(std::string_view fn) {
-		return LoadTextureFromData(ReadAllBytes_sv(GetFullPath(fn)));
+		auto fp = GetFullPath(fn);
+		return LoadTextureFromData(ReadAllBytes_sv(fp));
     }
 
 
