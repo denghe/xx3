@@ -28,7 +28,7 @@ file(GLOB sources
 add_executable(${name} ${sources})
 
 source_group("" FILES ${sources})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/../../ FILES ${sources})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src FILES ${sources})
 
 if (WIN32)
 	target_link_libraries(${name} winmm)

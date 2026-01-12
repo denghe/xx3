@@ -46,7 +46,7 @@ if (WIN32)
 endif()
 
 source_group("" FILES ${xx_sources})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/../../ FILES ${xx_sources})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${xx_sources})
 
 target_include_directories(xx PUBLIC
 #	glfw/include
