@@ -34,7 +34,7 @@ namespace xx {
 
         // load font & texture from memory
         // tex: for easy load font texture from memory
-        int32_t Init(uint8_t* buf_, size_t len_, std::string fullPath_, bool autoLoadTexture = true);
+        int32_t Init(uint8_t const* buf_, size_t len_, std::string fullPath_, bool autoLoadTexture = true);
 
         // texture index: page
         BMFontChar const* Get(char32_t charId) const;

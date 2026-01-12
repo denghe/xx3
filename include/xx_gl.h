@@ -65,6 +65,7 @@ namespace xx {
     GLProgram LinkGLProgram(GLuint vs, GLuint fs);
     GLTexture LoadGLTexture(void* data, GLsizei w, GLsizei h, GLint colorFormat);
     GLTexture LoadGLTexture(void* buf_, size_t len_);
+    GLTexture LoadGLTexture(Span d);
 
     GLFrameBuffer MakeGLFrameBuffer();
     void BindGLFrameBufferTexture(GLuint f, GLuint t);

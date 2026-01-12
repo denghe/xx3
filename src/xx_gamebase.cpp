@@ -188,14 +188,63 @@ namespace xx {
         return {};
     }
 
+
+	bool GameBase::IsCompressedData(void const* buf_, size_t len) {
+		auto buf = (uint8_t const*)buf_;
+		return len >= 4 && buf[0] == 0x28 && buf[1] == 0xB5 && buf[2] == 0x2F && buf[3] == 0xFD;
+	}
+
+	bool GameBase::IsCompressedData(Span d) {
+		return IsCompressedData(d.buf, d.len);
+	}
+
+	Data GameBase::LoadFileDataWithFullPath(std::string_view fp) {
+		auto d = ReadAllBytes_sv(fp);
+		if (!d) return d;
+		if (IsCompressedData(d)) {
+			Data d2;
+			ZstdDecompress(d, d2);
+			return d2;
+		}
+		return d;
+	}
+
+	// read all data by short path. return data + full path
+	Data GameBase::LoadFileData(std::string_view fn) {
+		auto p = GetFullPath(fn);
+		if (p.empty()) throw fn;
+		return LoadFileDataWithFullPath(p);
+	}
+
+	// copy or decompress
+	Data GameBase::LoadDataFromData(uint8_t const* buf, size_t len) {
+		if (IsCompressedData(buf, len)) {
+			Data d;
+			ZstdDecompress({ (char*)buf, len }, d);
+			return d;
+		}
+		return { buf, len };
+	}
+
+	Data GameBase::LoadDataFromData(Span d) {
+		return LoadDataFromData((uint8_t*)d.buf, d.len);
+	}
+
     Shared<GLTexture> GameBase::LoadTextureFromData(void* buf_, size_t len_) {
+		if (IsCompressedData(buf_, len_)) {	// zstd
+			Data d;
+			ZstdDecompress({ (char*)buf_, len_ }, d);
+			return MakeShared<GLTexture>(LoadGLTexture(d));
+		}
         return MakeShared<GLTexture>(LoadGLTexture(buf_, len_ ));
     }
 
+	Shared<GLTexture> GameBase::LoadTextureFromData(Span d) {
+		return LoadTextureFromData(d.buf, d.len);
+	}
+
     Shared<GLTexture> GameBase::LoadTexture(std::string_view fn) {
-        auto fp = GetFullPath(fn);
-        auto d = ReadAllBytes_sv(fp);
-        return MakeShared<GLTexture>(LoadGLTexture(d.buf, d.len));
+		return LoadTextureFromData(ReadAllBytes_sv(GetFullPath(fn)));
     }
 
 
@@ -618,8 +667,11 @@ namespace xx {
 
 		// init fonts
 		embed.font_sys.Emplace();
-		embed.font_sys->texs.Emplace(LoadTextureFromData(embeds::png::font_sys, _countof(embeds::png::font_sys)));
-		embed.font_sys->Init(embeds::fnt::font_sys, _countof(embeds::fnt::font_sys), "font_sys", false);
+		embed.font_sys->texs.Emplace(LoadTextureFromData(embeds::png::font_sys));
+		{
+			auto d = LoadDataFromData(embeds::fnt::font_sys);
+			embed.font_sys->Init(d.buf, d.len, "font_sys", false);
+		}
 
 		// init pngs( texture combined with font )
 		auto& ft = embed.font_sys->texs[0];

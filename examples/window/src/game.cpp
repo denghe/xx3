@@ -14,18 +14,21 @@ void Game::Init() {
 }
 
 void Game::GLInit() {
+	//SetDefaultBlendPremultipliedAlpha(true);
+
 	// load res
 	res.imgs[0] = LoadTexture("res/heart.png");
 	res.imgs[1] = LoadTexture("res/1.png");
 	res.imgs[2] = LoadTexture("res/2.png");
 
 	// combine all.frames
-	xx::RectPacker tp;
-	for (int32_t i = 0; i < sizeof(res) / sizeof(xx::Frame); ++i) {
-		tp.tfs.Add((xx::TinyFrame*)&((xx::Frame*)&res)[i]);
+	{
+		xx::RectPacker tp;
+		for (int32_t i = 0; i < sizeof(res) / sizeof(xx::Frame); ++i) {
+			tp.tfs.Add((xx::TinyFrame*)&((xx::Frame*)&res)[i]);
+		}
+		tp.AutoPack();
 	}
-	tp.AutoPack();
-
 
 	auto ds = designSize / 2;
 	int idx{};
@@ -92,10 +95,12 @@ void Game::Update() {
 	// logic update
 	heart->Update();
 
-	// draw
+	// draw items
 	for (auto& spr : sprites) Quad().DrawFrame(spr.frame, cam.ToGLPos(spr.pos), cam.scale);
 
 	heart->Draw();
+
+	SetBlendPremultipliedAlpha(false);
 	DrawNode(ui);
 }
 
@@ -112,7 +117,7 @@ void Game::OnResize(bool modeChanged_) {
 }
 
 void Game::Stat() {
-	printf("drawFPS = %d drawCall = %d drawVerts = %d delayUpdates.len = %d"
+	printf("drawFPS = %d drawCall = %d drawVerts = %d delayUpdates.len = %d\n"
 		, drawFPS, drawCall, drawVerts, delayUpdates.len
 	);
 }

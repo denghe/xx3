@@ -157,13 +157,39 @@ namespace xx {
         void DisableIME();  // call before Run if needed
 
 
+        static bool IsCompressedData(void const* buf_, size_t len);
+        static bool IsCompressedData(Span d);
+
         static bool IsAbsolute(std::string_view path_);
+
         // convert dir to search path format
         static std::string ToSearchPath(std::string_view dir);
+
         // add relative base dir to searchPaths
         void SearchPathAdd(std::string_view dir, bool insertToFront = false);
+
         std::string GetFullPath(std::string_view fn, bool fnIsFileName = true);
+
+        // read all data by full path
+        Data LoadFileDataWithFullPath(std::string_view fp);
+
+        // read all data by short path. return data
+        Data LoadFileData(std::string_view fn);
+
+        Data LoadDataFromData(uint8_t const* buf, size_t len);
+        Data LoadDataFromData(Span d);
+        template<size_t len>
+        Data LoadDataFromData(const uint8_t(&buf)[len]) {
+            return LoadDataFromData(buf, len);
+        }
+
         Shared<GLTexture> LoadTextureFromData(void* buf_, size_t len_);
+        Shared<GLTexture> LoadTextureFromData(Span d);
+        template<size_t len>
+        Shared<GLTexture> LoadTextureFromData(const uint8_t(&buf)[len]) {
+            return LoadTextureFromData((void*)buf, len);
+        }
+
         Shared<GLTexture> LoadTexture(std::string_view fn_);
 
 

@@ -22,11 +22,11 @@ struct Game : xx::GameBase {
 	xx::Rnd rnd;
 	xx::List<Sprite> sprites;
 
-	void Init();
-	void GLInit();
-	void Update();
-	void Delay();
-	void Stat();
-	void OnResize(bool modeChanged_);
+	void Init() override;
+	void GLInit() override;
+	void Update() override;
+	void Delay() override;
+	void Stat() override;
+	void OnResize(bool modeChanged_) override;
 };
 extern Game gg;

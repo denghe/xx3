@@ -1,5 +1,6 @@
 ﻿#include <xx.h>
 #include <fstream>
+#include <zstd.h>
 
 //#define STBI_NO_JPEG
 //#define STBI_NO_PNG
@@ -41,6 +42,7 @@ namespace xx {
 	}
 
     Data ReadAllBytes_sv(std::string_view path) {
+        if (path.empty()) return {};
         return ReadAllBytes((std::u8string_view&)path);
     }
 
@@ -53,6 +55,39 @@ namespace xx {
 		return 0;
 	}
 	
+
+    // .exe + 50k
+    void ZstdDecompress(std::string_view const& src, Data& dst) {
+        auto&& siz = ZSTD_getFrameContentSize(src.data(), src.size());
+        if (ZSTD_CONTENTSIZE_UNKNOWN == siz) throw std::logic_error("ZstdDecompress error: unknown content size.");
+        if (ZSTD_CONTENTSIZE_ERROR == siz) throw std::logic_error("ZstdDecompress read content size error.");
+        dst.Resize(siz);
+        if (0 == siz) return;
+        siz = ZSTD_decompress(dst.buf, siz, src.data(), src.size());
+        if (ZSTD_isError(siz)) throw std::logic_error("ZstdDecompress decompress error.");
+        dst.Resize(siz);
+    }
+
+    void TryZstdDecompress(Data& d) {
+        if (d.len >= 4) {
+            if (d[0] == 0x28 && d[1] == 0xB5 && d[2] == 0x2F && d[3] == 0xFD) {
+                Data d2;
+                ZstdDecompress(d, d2);
+                std::swap(d, d2);
+            }
+        }
+    }
+
+    // .exe + 320k
+    void ZstdCompress(std::string_view const& src, Data& dst, int level, bool doShrink) {
+        auto req = ZSTD_compressBound(src.size());
+        dst.Resize(req);
+        dst.len = ZSTD_compress(dst.buf, dst.cap, src.data(), src.size(), level);
+        if (doShrink) {
+            dst.Shrink();
+        }
+    }
+
 
 
     /**************************************************************************************************/
@@ -788,6 +823,10 @@ namespace xx {
         return {};
     }
 
+    GLTexture LoadGLTexture(Span d) {
+        return LoadGLTexture(d.buf, d.len);
+    }
+
     GLFrameBuffer MakeGLFrameBuffer() {
         GLuint f{};
         glGenFramebuffers(1, &f);
@@ -1149,7 +1188,7 @@ namespace xx {
 
     // load font & texture from memory
     // tex: for easy load font texture from memory
-    int32_t BMFont::Init(uint8_t* buf_, size_t len_, std::string fullPath_, bool autoLoadTexture) {
+    int32_t BMFont::Init(uint8_t const* buf_, size_t len_, std::string fullPath_, bool autoLoadTexture) {
         fullPath.clear();
         Data_r d{ buf_, len_ };
 
