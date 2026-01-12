@@ -1,0 +1,32 @@
+﻿#pragma once
+#include "pch.h"
+using XY = xx::XY;
+
+struct Sprite {
+	xx::Frame frame;
+	XY pos{};
+};
+
+struct Monster;
+struct Game : xx::GameBase {
+	static constexpr float cFps{ 120 };
+	static constexpr float cDelta{ 1.f / cFps };
+
+	struct {
+		std::array<xx::Frame, 3> imgs;
+	} res;
+
+	xx::Shared<xx::Node> ui;
+	xx::Camera cam;
+	xx::Shared<Monster> heart;
+	xx::Rnd rnd;
+	xx::List<Sprite> sprites;
+
+	void Init();
+	void GLInit();
+	void Update();
+	void Delay();
+	void Stat();
+	void OnResize(bool modeChanged_);
+};
+extern Game gg;
