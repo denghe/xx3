@@ -19,16 +19,6 @@ namespace xx {
         Right
     };
 
-    // for node layout calculate
-    struct Paddings {
-        float top, right, bottom, left;
-        constexpr XY LeftBottom() const { return { left, bottom }; };
-        constexpr XY RightBottom() const { return { right, bottom }; };
-        constexpr float LeftRight() const { return left + right; };
-        constexpr float TopBottom() const { return top + bottom; };
-        constexpr XY Total() const { return { left + right, top + bottom }; };
-        constexpr XY RightTopBottom() const { return { right, top + bottom }; };
-    };
 
     // for ui config
     struct Scale9Config {
@@ -168,34 +158,16 @@ namespace xx {
         decltype(Node::z) z;
         Node* n;
         Node* operator->() { return n; }
-        static bool LessThanComparer(ZNode const& a, ZNode const& b) {
+        inline static bool LessThanComparer(ZNode const& a, ZNode const& b) {
             return a.z < b.z;
         }
-        static bool GreaterThanComparer(ZNode const& a, ZNode const& b) {
+        inline static bool GreaterThanComparer(ZNode const& a, ZNode const& b) {
             return a.z > b.z;
         }
     };
 
-    template<bool skipScissorContent = true>
-    inline void FillZNodes(List<ZNode>& zns, Node* n) {
-        assert(n);
-        if constexpr (skipScissorContent) {
-            if (n->scissor && n->scissor == n->parent) return;
-        }
-        if ((n->size.x > 0.f || n->size.y > 0.f) && n->IsVisible()) {
-            zns.Emplace(n->z, n);
-        }
-        for (auto& c : n->children) {
-            FillZNodes(zns, c);
-        }
-    }
+    void FillZNodes(List<ZNode>& zns, Node* n, bool skipScissorContent = true);
 
-    inline void OrderByZDrawAndClear(List<ZNode>& zns) {
-        std::sort(zns.buf, zns.buf + zns.len, ZNode::LessThanComparer);	// draw small z first
-        for (auto& zn : zns) {
-            zn->Draw();
-        }
-        zns.Clear();
-    }
+    void OrderByZDrawAndClear(List<ZNode>& zns);
 
 }

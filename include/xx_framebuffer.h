@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "xx_data.h"
 #include "xx_ptr.h"
-#include "xx_prim.h"
+#include "xx_prims.h"
 #include "xx_gl.h"
 
 namespace xx {

@@ -30,8 +30,7 @@ add_subdirectory(soloud soloud)
 file(GLOB xx_sources
 	include/*.h
 	include/*.natvis
-	src/*.cpp
-	src/*.c
+	src/xx.cpp
 	deps/*.h
 	deps/*.c
 	deps/*.cpp

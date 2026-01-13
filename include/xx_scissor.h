@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "xx_gl.h"
+#include "xx_gamebase.h"
 
 namespace xx {
 

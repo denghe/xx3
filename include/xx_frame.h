@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "xx_ptr.h"
-#include "xx_prim.h"
+#include "xx_prims.h"
 #include "xx_gl.h"
 
 namespace xx {
@@ -23,31 +23,15 @@ namespace xx {
         TinyFrame& operator=(TinyFrame const&) = default;
         TinyFrame& operator=(TinyFrame&&) = default;
 
-        operator GLuint () const {
-            return tex->id;
-        }
-
-        operator UVRect () const {
-            return uvRect;
-        }
-
-        XY Size() const {
-            return { uvRect.w, uvRect.h };
-        }
-
-        TinyFrame(Shared<GLTexture> t) {
-            operator=(std::move(t));
-        }
-
+        operator GLuint () const;
+        operator UVRect () const;
+        XY Size() const;
+        void operator=(Shared<GLTexture> t);
+        TinyFrame(Shared<GLTexture> t);
         template<typename T>
         TinyFrame(Shared<GLTexture> t, T x, T y, T w, T h) {
             tex = std::move(t);
             uvRect = { (uint16_t)x, (uint16_t)y, (uint16_t)w, (uint16_t)h };
-        }
-
-        void operator=(Shared<GLTexture> t) {
-            tex = std::move(t);
-            uvRect = tex->Rect();
         }
     };
 
@@ -65,44 +49,20 @@ namespace xx {
         Frame& operator=(Frame const&) = default;
         Frame& operator=(Frame&&) = default;
 
-        operator TinyFrame& () const {
-            return *(TinyFrame*)this;
-        }
-        operator TinyFrame* () const {
-            return (TinyFrame*)this;
-        }
+        operator TinyFrame& () const;
+        operator TinyFrame* () const;
+        operator GLuint () const;
+        operator UVRect () const;
+        operator XY const& () const;
+        XY Size() const;
+        void operator=(Shared<GLTexture> t);
 
-        operator GLuint () const {
-            return tex->id;
-        }
-
-        operator UVRect () const {
-            return uvRect;
-        }
-
-        operator XY const& () const {
-            return anchor;
-        }
-
-        XY Size() const {
-            return { uvRect.w, uvRect.h };
-        }
-
-        Frame(Shared<GLTexture> t) {
-            operator=(std::move(t));
-        }
-
+        Frame(Shared<GLTexture> t);
         template<typename T>
         Frame(Shared<GLTexture> t, T x, T y, T w, T h, XY anchor_ = 0.5f) {
             tex = std::move(t);
             uvRect = { (uint16_t)x, (uint16_t)y, (uint16_t)w, (uint16_t)h };
             anchor = anchor_;
-        }
-
-        void operator=(Shared<GLTexture> t) {
-            tex = std::move(t);
-            uvRect = tex->Rect();
-            anchor = 0.5f;
         }
     };
 

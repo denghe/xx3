@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "xx_utils.h"
+#include "xx_includes.h"
 
 namespace xx {
 
@@ -505,6 +505,16 @@ namespace xx {
         }
         return {};
     }
+
+    /************************************************************************************/
+
+    // memmove support flags
+    template<typename T> struct IsPod<Shared<T>, void> : std::true_type {};
+    template<typename T> struct IsPod<Weak<T>, void> : std::true_type {};
+
+    template<typename T> constexpr bool IsShared_v = TemplateIsSame_v<std::remove_cvref_t<T>, Shared<AnyType>>;
+    template<typename T> constexpr bool IsWeak_v = TemplateIsSame_v<std::remove_cvref_t<T>, Weak<AnyType>>;
+
 
     template<typename T, typename...Args>
     Shared<T> MakeShared(Args &&...args) {

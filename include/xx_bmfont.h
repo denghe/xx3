@@ -1,8 +1,7 @@
 ﻿#pragma once
-#include "xx_data.h"
+#include "xx_gl.h"
 #include "xx_list.h"
 #include "xx_ptr.h"
-#include "xx_gl.h"
 
 namespace xx {
 

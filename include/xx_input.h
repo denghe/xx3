@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "xx_includes.h"
+#include "xx_glfw.h"
 
 namespace xx {
 

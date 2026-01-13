@@ -1,8 +1,9 @@
 ﻿#pragma once
 #include "xx_list.h"
-#include "xx_prim.h"
+#include "xx_prims.h"
 #include "xx_gl.h"
 #include "xx_frame.h"
+#include <stb_rect_pack.h>
 
 namespace xx {
 	
