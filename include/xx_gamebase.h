@@ -99,6 +99,8 @@ namespace xx {
 
         Shader* shader{};
 
+        Sound sound;
+
         std::string rootPath;
         std::vector<std::string> searchPaths;
         std::filesystem::path tmpPath;
@@ -220,6 +222,19 @@ namespace xx {
         void SetWindowMode(XY size_ = {});
         void SetBorderlessMode(bool b = true);
         void SleepSecs(double secs);    // example: SleepSecs(cDelta - (glfwGetTime() - time));
+
+
+        // ogg / wav is supported
+        Shared<SoLoud::Wav> LoadSoundSourceFromData(uint8_t* buf, size_t len, bool looping = false);
+        Shared<SoLoud::Wav> LoadSoundSource(std::string_view fn, bool looping = false);
+        unsigned int GetActiveVoiceCount();
+        int PlayAudio(Shared<SoLoud::Wav> const& ss_, float volume_ = 1.f, float pan_ = 0.f, float speed_ = 1.f);
+        int PlayMusic(Shared<SoLoud::Wav> const& ss_, float volume_ = 1.f, float pan_ = 0.f, float speed_ = 1.f);
+        template<size_t len>
+        Shared<SoLoud::Wav> LoadSoundSourceFromData(const uint8_t(&buf)[len], bool looping = false) {
+            return LoadSoundSourceFromData((uint8_t*)buf, len, looping);
+        }
+
 
         int32_t Run();
         void Loop(bool fromEvent);

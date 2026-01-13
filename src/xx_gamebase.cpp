@@ -301,6 +301,41 @@ namespace xx {
 
 
 
+	Shared<SoLoud::Wav> GameBase::LoadSoundSourceFromData(uint8_t* buf, size_t len, bool looping) {
+		assert(!IsZstdCompressedData(buf, len));
+		auto rtv = MakeShared<SoLoud::Wav>();
+		auto r = rtv->loadMem(buf, len, false, false);
+		assert(!r);
+		if (looping) {
+			rtv->setLooping(true);
+		}
+		return rtv;
+	}
+
+	Shared<SoLoud::Wav> GameBase::LoadSoundSource(std::string_view fn, bool looping) {
+		auto d = LoadFileData(fn);
+		assert(d);
+		return LoadSoundSourceFromData(d.buf, d.len, looping);
+	}
+
+	unsigned int GameBase::GetActiveVoiceCount() {
+		return sound.GetActiveVoiceCount();
+	}
+
+	int GameBase::PlayAudio(Shared<SoLoud::Wav> const& ss_, float volume_, float pan_, float speed_) {
+		if (mute || audioVolume == 0) return 0;
+		return sound.Play(ss_, volume_ * audioVolume, pan_, speed_);
+	}
+
+	int GameBase::PlayMusic(Shared<SoLoud::Wav> const& ss_, float volume_, float pan_, float speed_) {
+		if (mute || musicVolume == 0) return 0;
+		return sound.Play(ss_, volume_ * musicVolume, pan_, speed_);
+	}
+
+
+
+
+
 
 	void GameBase::HandleMouseMove(XY mp_) {
 		mousePos = mp_;
@@ -493,7 +528,7 @@ namespace xx {
 
 	int32_t GameBase::Run() {
 		running = true;
-		//sound.Init();
+		sound.Init();
 
 #ifdef WIN32
 		SetConsoleOutputCP(CP_UTF8);
@@ -699,7 +734,7 @@ namespace xx {
 		// ...
 
 		// init sound sources
-		//embed.ss_ui_focus = LoadSoundSourceFromData(embeds::wav::ui_focus);
+		embed.ss_ui_focus = LoadSoundSourceFromData(embeds::wav::ui_focus);
 
 		// init shaders
 		shaderQuad.Init();
