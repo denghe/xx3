@@ -3,7 +3,7 @@
 namespace xx {
 
 	// Frame.userData map to Events.index
-	inline void SpineToFrames(
+	void SpineToFrames(
 		List<Frame>& outFrames
 		, List<SpineEventData>& outEventDatas
 		, spine::SkeletonData* sd_
@@ -115,7 +115,7 @@ namespace xx {
 		}
 	}
 
-	inline void LoadSpineToFrames(
+	void LoadSpineToFrames(
 		std::string filePrefix
 		, std::string animName
 		, List<Frame>& outFrames

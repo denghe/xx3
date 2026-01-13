@@ -281,6 +281,61 @@ namespace xx {
     };
     template<typename T> constexpr bool IsFunction_v = IsFunction<std::remove_cvref_t<T>>::value;
 
+
+    /************************************************************************************/
+    // mapping operator(): return T, container, args, mutable
+
+    template<typename T, typename = void>
+    struct FuncTraits;
+
+    template<typename Rtv, typename...Args>
+    struct FuncTraits<Rtv(*)(Args ...)> {
+        using R = Rtv;
+        using A = std::tuple<Args...>;
+        using A2 = std::tuple<std::decay_t<Args>...>;
+        using C = void;
+        static const bool isMutable = true;
+    };
+
+    template<typename Rtv, typename...Args>
+    struct FuncTraits<Rtv(Args ...)> {
+        using R = Rtv;
+        using A = std::tuple<Args...>;
+        using A2 = std::tuple<std::decay_t<Args>...>;
+        using C = void;
+        static const bool isMutable = true;
+    };
+
+    template<typename Rtv, typename CT, typename... Args>
+    struct FuncTraits<Rtv(CT::*)(Args ...)> {
+        using R = Rtv;
+        using A = std::tuple<Args...>;
+        using A2 = std::tuple<std::decay_t<Args>...>;
+        using C = CT;
+        static const bool isMutable = true;
+    };
+
+    template<typename Rtv, typename CT, typename... Args>
+    struct FuncTraits<Rtv(CT::*)(Args ...) const> {
+        using R = Rtv;
+        using A = std::tuple<Args...>;
+        using A2 = std::tuple<std::decay_t<Args>...>;
+        using C = CT;
+        static const bool isMutable = false;
+    };
+
+    template<typename T>
+    struct FuncTraits<T, std::void_t<decltype(&T::operator())> >
+        : public FuncTraits<decltype(&T::operator())> {
+    };
+
+    template<typename T> using FuncR_t = typename FuncTraits<T>::R;
+    template<typename T> using FuncA_t = typename FuncTraits<T>::A;
+    template<typename T> using FuncA2_t = typename FuncTraits<T>::A2;
+    template<typename T> using FuncC_t = typename FuncTraits<T>::C;
+    template<typename T> constexpr bool isMutable_v = FuncTraits<T>::isMutable;
+
+
     /************************************************************************************/
     // check tuple contains T
 

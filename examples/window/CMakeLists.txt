@@ -79,12 +79,12 @@ if(MSVC)
 		$<$<PLATFORM_ID:Windows>:/MP${Biogears_BUILD_PARALLEL_LEVEL}>
 	)
 
-
 	set_target_properties(${name} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 
 	set_source_files_properties(src/pch.cpp PROPERTIES COMPILE_FLAGS "/Ycpch.h")
 	target_compile_options(${name} PRIVATE $<$<PLATFORM_ID:Windows>:/Yupch.h>)
 	
+	target_compile_options(${name} PRIVATE $<$<PLATFORM_ID:Windows>:/arch:AVX2>)
 else()
 
 	target_precompile_headers(${name}

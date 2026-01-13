@@ -24,10 +24,10 @@ namespace xx {
 	}
 
 	SpinePlayer& SpinePlayer::Update(float delta) {
-		skeleton.updateWorldTransform();
 		skeleton.update(delta * timeScale);
 		animationState.update(delta * timeScale);
 		animationState.apply(skeleton);
+		skeleton.updateWorldTransform();
 		return *this;
 	}
 
