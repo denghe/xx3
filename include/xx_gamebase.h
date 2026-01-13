@@ -8,6 +8,7 @@
 #include "xx_node.h"
 #include "xx_bmfont.h"
 #include "xx_input.h"
+#include "xx_sound.h"
 
 namespace xx {
 
@@ -146,9 +147,9 @@ namespace xx {
 
             List<TinyFrame> icon_flags_;
 
-            //Shared<SoundSource>
-            //    ss_ui_focus;
-            //// ...
+            Shared<SoLoud::Wav>
+                ss_ui_focus;
+            // ...
 
             Shared<BMFont> font_sys;
         } embed;
@@ -214,6 +215,15 @@ namespace xx {
         void HandleJoystickDisconnected(int jid);
         void BaseUpdate();
 
+        void SetMousePointerVisible(bool visible_);
+        void SetFullScreenMode(XY size_ = {});
+        void SetWindowMode(XY size_ = {});
+        void SetBorderlessMode(bool b = true);
+        void SleepSecs(double secs);    // example: SleepSecs(cDelta - (glfwGetTime() - time));
+
+        int32_t Run();
+        void Loop(bool fromEvent);
+
         template<typename ST>
         ST& ShaderBegin(ST& s) {
             if (shader != &s) {
@@ -228,13 +238,15 @@ namespace xx {
         Shader_Quad shaderQuad;     // default shader
         Shader_Quad& Quad() { return ShaderBegin(shaderQuad); }
 
-        void SetMousePointerVisible(bool visible_);
-        void SetFullScreenMode(XY size_ = {});
-        void SetWindowMode(XY size_ = {});
-        void SetBorderlessMode(bool b = true);
-        void SleepSecs(double secs);    // example: SleepSecs(cDelta - (glfwGetTime() - time));
-        int32_t Run();
-        void Loop(bool fromEvent);
+        Shader_QuadLight shaderQuadLight;
+        Shader_QuadLight& QuadLight() { return ShaderBegin(shaderQuadLight); }
+
+        Shader_Spine shaderSpine;
+        Shader_Spine& Spine() { return ShaderBegin(shaderSpine); }
+
+        Shader_TexVert shaderTexVert;
+        Shader_TexVert& TexVert() { return ShaderBegin(shaderTexVert); }
+        // ...
     };
 
 }

@@ -453,7 +453,7 @@ namespace xx {
             }
         }
 
-        Weak(Weak &&o) : h((HeaderType*)o.h) {
+        Weak(Weak &&o) noexcept : h((HeaderType*)o.h) {
             o.h = {};
         }
 
@@ -481,7 +481,7 @@ namespace xx {
             return *this;
         }
 
-        Weak &operator=(Weak &&o) {
+        Weak &operator=(Weak &&o) noexcept {
             std::swap(h, o.h);
             return *this;
         }

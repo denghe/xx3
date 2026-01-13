@@ -1,6 +1,7 @@
 ﻿#include "xx_file.h"
 #include "xx_embeds.h"
 #include "xx_gamebase.h"
+#include "xx_spine.h"
 
 namespace xx {
 	
@@ -702,12 +703,12 @@ namespace xx {
 
 		// init shaders
 		shaderQuad.Init();
-		//shaderQuadLight.Init();
-		//shaderSpine.Init();
-		//shaderTexVert.Init();
+		shaderQuadLight.Init();
+		shaderSpine.Init();
+		shaderTexVert.Init();
 		// ...
 
-		//gSpineEnv.Init();
+		gSpineEnv.Init();
 
 		// search exists joys
 		for (auto jid = GLFW_JOYSTICK_1; jid <= GLFW_JOYSTICK_LAST; jid++) {

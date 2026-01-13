@@ -22,6 +22,7 @@
 #include "xx_bmfont.h"
 #include "xx_input.h"
 #include "xx_embeds.h"
+#include "xx_sound.h"
 #include "xx_gamebase.h"
 
 #include "xx_ui_label.h"
