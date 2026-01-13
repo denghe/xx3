@@ -8,7 +8,6 @@
 namespace xx {
 	
     struct RectPacker {
-
         List<TinyFrame*> tfs;		// need fill by user
         List<stbrp_rect> rects;
         List<stbrp_node> nodes;
@@ -18,9 +17,7 @@ namespace xx {
         // try resize & auto generate mipmap
         int32_t AutoPack(int32_t minPackSize_ = 1024, XY padding_ = 8);
         // after pack, visit tex
-        GLTexture& Tex() {
-            return *tfs[0]->tex;
-        }
+        GLTexture& Tex();
     };
 
 }

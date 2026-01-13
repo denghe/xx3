@@ -62,4 +62,7 @@ namespace xx {
         return 0;
     }
 
+    GLTexture& RectPacker::Tex() {
+        return *tfs[0]->tex;
+    }
 }

@@ -1,6 +1,11 @@
 ﻿#include "xx_rnd.h"
+#include "xx_time.h"
 
 namespace xx {
+
+	Rnd::Rnd() {
+		SetSeed(NowEpoch10m());
+	}
 
 	void Rnd::SetSeed(uint64_t seed) {
 		auto calc = [&]()->uint64_t {

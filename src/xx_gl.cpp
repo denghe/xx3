@@ -268,4 +268,12 @@ namespace xx {
         glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, tar.buf);
     }
 
+
+
+    GLVertTexture LoadGLVertTexture(void* data, GLsizei w, GLsizei h, int32_t numVerts, int32_t numFrames) {
+        auto id = GLTexture::MakeTex();
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, w, h, 0, GL_RGBA, GL_FLOAT, data);
+        return { id, { w, h }, numVerts, numFrames };
+    }
+
 }

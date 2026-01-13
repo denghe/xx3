@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "xx_time.h"
 #include "xx_list.h"
 
 namespace xx {
@@ -8,9 +7,7 @@ namespace xx {
     struct Rnd {
         std::array<uint32_t, 4> state;
 
-        Rnd() {
-            SetSeed(NowEpoch10m());
-        }
+        Rnd();
         Rnd(Rnd const&) = default;
         Rnd& operator=(Rnd const&) = default;
 

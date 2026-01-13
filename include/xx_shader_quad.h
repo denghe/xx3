@@ -10,8 +10,7 @@ namespace xx {
         RGBA8 color{ 255, 255, 255, 255 };                      // u8n * 4
         UVRect texRect{};                                       // u16 * 4 ( left-top: 0,0 )
 
-        void Fill(UVRect rect_, XY pos_ = {}, XY anchor_ = 0.5f, XY scale_ = 1.f
-            , float radians_ = 0.f, float colorplus_ = 1.f, RGBA8 color_ = RGBA8_White);
+        void Fill(UVRect rect_, XY pos_ = {}, XY anchor_ = 0.5f, XY scale_ = 1.f, float radians_ = 0.f, float colorplus_ = 1.f, RGBA8 color_ = RGBA8_White);
     };
 
     struct Shader_Quad : Shader {
@@ -30,10 +29,8 @@ namespace xx {
         virtual void End() override;
         void Commit();
         Shader_QuadData* Alloc(GLuint texId_, int32_t num_);
-        void Draw(GLuint texId_, UVRect rect_, XY pos_ = {}, XY anchor_ = 0.5f
-            , XY scale_ = 1.f, float radians_ = 0.f, float colorplus_ = 1.f, RGBA8 color_ = RGBA8_White);
-        void DrawTinyFrame(TinyFrame& tinyFrame_, XY pos_ = {}, XY anchor_ = 0.5f
-            , XY scale_ = 1.f, float radians_ = 0.f, float colorplus_ = 1.f, RGBA8 color_ = RGBA8_White);
+        void Draw(GLuint texId_, UVRect rect_, XY pos_ = {}, XY anchor_ = 0.5f, XY scale_ = 1.f, float radians_ = 0.f, float colorplus_ = 1.f, RGBA8 color_ = RGBA8_White);
+        void DrawTinyFrame(TinyFrame& tinyFrame_, XY pos_ = {}, XY anchor_ = 0.5f, XY scale_ = 1.f, float radians_ = 0.f, float colorplus_ = 1.f, RGBA8 color_ = RGBA8_White);
         void DrawFrame(Frame& frame_, XY pos_ = {}, XY scale_ = 1.f, float radians_ = 0.f, float colorplus_ = 1.f, RGBA8 color_ = RGBA8_White);
     };
 

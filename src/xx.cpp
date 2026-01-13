@@ -16,6 +16,7 @@
 #include "xx_rectpacker.cpp"
 #include "xx_rnd.cpp"
 #include "xx_shaders.cpp"
+#include "xx_scissor.cpp"
 #include "xx_ui_background.cpp"
 #include "xx_ui_button.cpp"
 #include "xx_ui_checkbox.cpp"
