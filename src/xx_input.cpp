@@ -38,7 +38,7 @@ namespace xx {
 
 
 
-    void JoyState::Init(double* globalTime_) {
+    void JoyState::Init(float* globalTime_) {
         for (auto& o : btns) {
             o.globalTime = globalTime_;
         }

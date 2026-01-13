@@ -8,7 +8,7 @@ namespace xx {
     struct BtnState {
         int32_t pressed{};
         float nextActiveTime{};
-        double* globalTime{};		// == &GameBase.time
+        float* globalTime{};		// == &GameBase.time
 
         operator bool() const;  // return pressed
         void Press();   // pressed = true
@@ -27,7 +27,7 @@ namespace xx {
         // AxisLeft H V, AxisRight H V, Trigger L R
         std::array<float, GLFW_GAMEPAD_AXIS_LAST + 1> axes{};
 
-        void Init(double* globalTime_);
+        void Init(float* globalTime_);
         void ClearValues();
         void Cleanup();
     };

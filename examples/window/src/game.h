@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "pch.h"
-using XY = xx::XY;
 
 struct Snake;
 struct Game : xx::GameBase {

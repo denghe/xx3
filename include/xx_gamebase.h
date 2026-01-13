@@ -15,10 +15,6 @@ namespace xx {
     struct GameBase {
         inline static struct GameBase* instance{};
 
-#ifdef WIN32
-        HANDLE eventForDelay = CreateEvent(NULL, FALSE, FALSE, NULL);
-#endif
-
         GameBase(GameBase const&) = delete;
         GameBase& operator=(GameBase const&) = delete;
         GameBase() {
@@ -69,7 +65,7 @@ namespace xx {
         std::array<uint32_t, 3> blendDefault{ GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_FUNC_ADD };
         std::array<uint32_t, 3> blend{ blendDefault };
 
-        double time{}, delta{};								// usually for ui logic
+        float time{}, delta{};								// usually for ui logic
         int32_t drawVerts{}, drawCall{}, drawFPS{};			// counters
         float drawFPSTimePool{};							// for count drawFPS
 
@@ -108,7 +104,9 @@ namespace xx {
         List<std::function<int32_t()>> delayUpdates;		// call after update
 
         GLFWwindow* wnd{};
-
+#ifdef WIN32
+        HANDLE eventForDelay = CreateEvent(NULL, FALSE, FALSE, NULL);
+#endif
 
         List<ZNode> tmpZNodes;	// for node tree sort
 
